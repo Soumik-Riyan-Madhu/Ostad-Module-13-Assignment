@@ -1,0 +1,685 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>Blog API | Developer Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090e1b;
+      --panel: #111a2b;
+      --panel-light: #172237;
+      --border: #26334a;
+      --text: #edf3ff;
+      --muted: #8c9bb5;
+      --green: #53e0ad;
+      --blue: #7aa7ff;
+      --purple: #b6a0ff;
+      --red: #ff8293;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 10% 0%, #14274a 0%, transparent 38%),
+        radial-gradient(ellipse at 100% 15%, #241a46 0%, transparent 32%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .container {
+      width: min(1080px, calc(100% - 36px));
+      margin: auto;
+    }
+
+    header {
+      padding: 25px 0;
+      border-bottom: 1px solid #ffffff0d;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #53e0ad, #63a7ff);
+      color: #081520;
+      font-size: 22px;
+    }
+
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid #53e0ad35;
+      border-radius: 999px;
+      background: #53e0ad0d;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 12px currentColor;
+    }
+
+    .hero {
+      padding: 70px 0 35px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      color: var(--green);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 750px;
+      font-size: clamp(36px, 6vw, 62px);
+      line-height: 1.12;
+      letter-spacing: -2.8px;
+    }
+
+    h1 span {
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      max-width: 620px;
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 44px;
+      padding: 0 17px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--green);
+    }
+
+    .btn.primary {
+      border-color: transparent;
+      background: var(--green);
+      color: #071711;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 20px 0 55px;
+    }
+
+    .stat, .panel, .tech-card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(145deg, #141e30eF, #0e1727f5);
+    }
+
+    .stat {
+      padding: 22px;
+    }
+
+    .stat-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .stat-icon {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--panel-light);
+      font-size: 17px;
+    }
+
+    .stat h2 {
+      margin-top: 17px;
+      font-size: 27px;
+      letter-spacing: -0.7px;
+    }
+
+    .stat p {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .section {
+      margin-bottom: 48px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    .section-heading h2 {
+      font-size: 22px;
+      letter-spacing: -0.6px;
+    }
+
+    .section-heading p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .endpoint-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .endpoint {
+      display: grid;
+      grid-template-columns: 90px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 17px;
+      padding: 19px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: #111a2bd9;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .endpoint:hover {
+      transform: translateY(-2px);
+      border-color: #526b8c;
+    }
+
+    .method {
+      padding: 7px 9px;
+      border-radius: 8px;
+      text-align: center;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .post { background: #53e0ad18; color: var(--green); }
+    .get { background: #7aa7ff18; color: var(--blue); }
+    .delete { background: #ff829318; color: var(--red); }
+
+    .endpoint-path {
+      overflow-wrap: anywhere;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .endpoint-desc {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .copy-btn {
+      padding: 8px 11px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: #ffffff05;
+      color: #c6d2e5;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .copy-btn:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 24px;
+    }
+
+    .panel h3 {
+      margin-bottom: 7px;
+      font-size: 16px;
+    }
+
+    .panel > p {
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .tech-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .tech {
+      padding: 8px 11px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: #ffffff04;
+      color: #cbd8eb;
+      font-size: 12px;
+    }
+
+    .steps {
+      display: grid;
+      gap: 15px;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      color: #cbd8eb;
+      font-size: 13px;
+    }
+
+    .step-num {
+      display: grid;
+      flex: 0 0 27px;
+      place-items: center;
+      height: 27px;
+      border-radius: 8px;
+      background: #53e0ad18;
+      color: var(--green);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+    }
+
+    code {
+      overflow-wrap: anywhere;
+      color: var(--green);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+    }
+
+    .footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 65px;
+      padding: 25px 0;
+      border-top: 1px solid #ffffff12;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer strong {
+      color: var(--text);
+    }
+
+    @media (max-width: 680px) {
+      .hero { padding-top: 48px; }
+      h1 { letter-spacing: -1.6px; }
+      .stats { grid-template-columns: 1fr; }
+      .stat { padding: 18px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .endpoint {
+        grid-template-columns: 72px minmax(0, 1fr);
+        gap: 12px;
+        padding: 15px;
+      }
+      .copy-btn {
+        grid-column: 2;
+        justify-self: start;
+      }
+      .section-heading { align-items: start; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="/">
+        <span class="brand-icon">✦</span>
+        <span>
+          Blog API
+          <small>Developer Console</small>
+        </span>
+      </a>
+
+      <div class="status" id="serverStatus" role="status">
+        <span class="dot"></span>
+        <span id="statusText">Checking status...</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="eyebrow">✦ REST API · BACKEND PROJECT</div>
+
+      <h1>
+        Your content.<br>
+        <span>Your API.</span>
+      </h1>
+
+      <p>
+        A lightweight Blog CRUD backend powered by Node.js, Express.js,
+        MongoDB and Mongoose. Explore the available endpoints and test
+        your requests using Postman.
+      </p>
+
+      <div class="actions">
+        <a class="btn primary" href="/blogs" target="_blank">
+          Explore Blogs ↗
+        </a>
+        <button class="btn" id="refreshBtn" type="button">
+          ↻ Refresh Status
+        </button>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="API overview">
+      <article class="stat">
+        <div class="stat-top">
+          <span>API ENDPOINTS</span>
+          <span class="stat-icon">⌘</span>
+        </div>
+        <h2>04</h2>
+        <p>All required CRUD routes</p>
+      </article>
+
+      <article class="stat">
+        <div class="stat-top">
+          <span>DATABASE</span>
+          <span class="stat-icon">◈</span>
+        </div>
+        <h2 id="dbStatus" style="font-size: 23px;">Checking...</h2>
+        <p>MongoDB connection status</p>
+      </article>
+
+      <article class="stat">
+        <div class="stat-top">
+          <span>SERVER</span>
+          <span class="stat-icon">⌁</span>
+        </div>
+        <h2 id="serverValue" style="color: var(--green);">Online</h2>
+        <p id="lastChecked">Waiting for status...</p>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>API Endpoints</h2>
+          <p>Everything you need to manage blog resources.</p>
+        </div>
+      </div>
+
+      <div class="endpoint-list">
+        <article class="endpoint">
+          <span class="method post">POST</span>
+          <div>
+            <div class="endpoint-path">/blogs</div>
+            <div class="endpoint-desc">Create a new blog post</div>
+          </div>
+          <button class="copy-btn" data-path="/blogs" type="button">
+            Copy URL
+          </button>
+        </article>
+
+        <article class="endpoint">
+          <span class="method get">GET</span>
+          <div>
+            <div class="endpoint-path">/blogs</div>
+            <div class="endpoint-desc">Retrieve all blog posts</div>
+          </div>
+          <button class="copy-btn" data-path="/blogs" type="button">
+            Copy URL
+          </button>
+        </article>
+
+        <article class="endpoint">
+          <span class="method get">GET</span>
+          <div>
+            <div class="endpoint-path">/blogs/:id</div>
+            <div class="endpoint-desc">Retrieve one blog by its ID</div>
+          </div>
+          <button class="copy-btn" data-path="/blogs/:id" type="button">
+            Copy path
+          </button>
+        </article>
+
+        <article class="endpoint">
+          <span class="method delete">DELETE</span>
+          <div>
+            <div class="endpoint-path">/blogs/:id</div>
+            <div class="endpoint-desc">Delete a blog by its ID</div>
+          </div>
+          <button class="copy-btn" data-path="/blogs/:id" type="button">
+            Copy path
+          </button>
+        </article>
+      </div>
+    </section>
+
+    <section class="section grid-2">
+      <article class="panel">
+        <h3>Built With</h3>
+        <p>A simple and reliable Node.js backend stack.</p>
+
+        <div class="tech-list">
+          <span class="tech">Node.js</span>
+          <span class="tech">Express.js</span>
+          <span class="tech">MongoDB</span>
+          <span class="tech">Mongoose</span>
+          <span class="tech">dotenv</span>
+          <span class="tech">Postman</span>
+        </div>
+      </article>
+
+      <article class="panel">
+        <h3>Quick Start</h3>
+        <p>Test the API in a few simple steps.</p>
+
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">01</span>
+            <span>Run <code>npm run dev</code> in your terminal.</span>
+          </div>
+          <div class="step">
+            <span class="step-num">02</span>
+            <span>Open Postman and enter the endpoint URL.</span>
+          </div>
+          <div class="step">
+            <span class="step-num">03</span>
+            <span>Choose the HTTP method and send your request.</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <span>Built with care using <strong>Node.js & MongoDB</strong> by <i>Soumik Riyan Madhu</i></span>
+      <span>Blog CRUD Backend · Module 13</span>
+    </footer>
+  </main>
+
+  <script>
+    const statusText = document.getElementById("statusText");
+    const serverStatus = document.getElementById("serverStatus");
+    const serverValue = document.getElementById("serverValue");
+    const dbStatus = document.getElementById("dbStatus");
+    const lastChecked = document.getElementById("lastChecked");
+    const refreshBtn = document.getElementById("refreshBtn");
+
+    async function checkStatus() {
+      refreshBtn.disabled = true;
+      statusText.textContent = "Checking...";
+      lastChecked.textContent = "Checking connection...";
+
+      try {
+        const response = await fetch("/api/status");
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error("Status request failed");
+        }
+
+        statusText.textContent = result.server;
+        serverValue.textContent = result.server;
+        dbStatus.textContent = result.database;
+
+        const connected = result.database === "Connected";
+
+        dbStatus.style.color = connected
+          ? "var(--green)"
+          : "var(--red)";
+
+        serverStatus.style.color = "var(--green)";
+        serverStatus.style.borderColor = "#53e0ad35";
+
+        lastChecked.textContent =
+          "Last checked: " + new Date().toLocaleTimeString();
+
+      } catch (error) {
+        statusText.textContent = "Unavailable";
+        serverValue.textContent = "Offline";
+        serverValue.style.color = "var(--red)";
+        dbStatus.textContent = "Unknown";
+        dbStatus.style.color = "var(--red)";
+        lastChecked.textContent = "Could not fetch API status";
+
+        serverStatus.style.color = "var(--red)";
+        serverStatus.style.borderColor = "#ff829335";
+      } finally {
+        refreshBtn.disabled = false;
+      }
+    }
+
+    refreshBtn.addEventListener("click", checkStatus);
+
+    document.querySelectorAll(".copy-btn").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const url = window.location.origin + button.dataset.path;
+
+        try {
+          await navigator.clipboard.writeText(url);
+          button.textContent = "Copied!";
+        } catch (error) {
+          button.textContent = "Copy failed";
+        }
+
+        setTimeout(() => {
+          button.textContent =
+            button.dataset.path.includes(":id")
+              ? "Copy path"
+              : "Copy URL";
+        }, 1500);
+      });
+    });
+
+    checkStatus();
+  </script>
+</body>
+</html>
