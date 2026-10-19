@@ -138,8 +138,4 @@ This is a **backend-only project**. No frontend interface is included.
   ⭐ If you find this project useful, consider giving the repository a star!
 </p>
 
-GitHub: [Soumik-Riyan-Madhu](https://github.com/Soumik-Riyan-Madhu)
-
 ---
-
-Made with Node.js, Express.js, MongoDB, and Mongoose.
