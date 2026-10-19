@@ -126,6 +126,18 @@ This is a **backend-only project**. No frontend interface is included.
 
 **Soumik Riyan Madhu**
 
+## 📚 Course
+
+**Ostad | Full Stack Web Development with JavaScript (MERN) & AI**
+
+*Created for educational and learning purposes.*
+
+---
+
+<p align="center">
+  ⭐ If you find this project useful, consider giving the repository a star!
+</p>
+
 GitHub: [Soumik-Riyan-Madhu](https://github.com/Soumik-Riyan-Madhu)
 
 ---
